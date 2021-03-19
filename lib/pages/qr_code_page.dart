@@ -12,10 +12,10 @@ class QRViewExample extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _QRViewExampleState();
+  State<StatefulWidget> createState() => QRCodePage();
 }
 
-class _QRViewExampleState extends State<QRViewExample> {
+class QRCodePage extends State<QRViewExample> {
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');

@@ -14,7 +14,8 @@ class WeatherLoading extends WeatherState {
 }
 
 class WeatherLoaded extends WeatherState {
-  final Weather weather;
+  final WeatherDTO weather;
+
   const WeatherLoaded(this.weather);
 
   @override

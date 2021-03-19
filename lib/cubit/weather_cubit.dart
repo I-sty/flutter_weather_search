@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather_dto.dart';
 import 'package:flutter_app/data/weather_repository.dart';
 import 'package:meta/meta.dart';
 

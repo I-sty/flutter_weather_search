@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather_dto.dart';
 import 'package:flutter_app/data/weather_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'weather_event.dart';
-
 part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
@@ -22,12 +21,14 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     if (event is GetWeather) {
       try {
         yield WeatherLoading();
-        if (event.cityName.isEmpty || _isNumeric(event.cityName)) {
+        if (event.cityName == null ||
+            event.cityName!.isEmpty ||
+            _isNumeric(event.cityName)) {
           yield WeatherError("Unknown city name.");
           return;
         }
         final weather =
-            await _weatherRepository.fetchWeather(event.cityName, event.unit);
+            await _weatherRepository.fetchWeather(event.cityName!, event.unit);
         yield WeatherLoaded(weather);
       } on NetworkException {
         yield WeatherError("Couldn't fetch weather.");

@@ -4,16 +4,16 @@ import 'dart:io';
 import 'package:flutter_app/constants.dart';
 import 'package:http/http.dart' as http;
 
-import 'model/weather.dart';
+import 'model/weather_dto.dart';
 
 abstract class WeatherRepository {
   /// Throws [NetworkException], [CityNotFoundException].
-  Future<Weather> fetchWeather(String cityName, OWUnits metric);
+  Future<WeatherDTO> fetchWeather(String cityName, OWUnits metric);
 }
 
 class WeatherRepositoryImpl implements WeatherRepository {
   @override
-  Future<Weather> fetchWeather(String cityName, OWUnits metric) async {
+  Future<WeatherDTO> fetchWeather(String cityName, OWUnits metric) async {
     var uri = Uri.https(OWConstants.URL, OWConstants.PATH, {
       OWConstants.QUERY: cityName,
       OWConstants.UNITS: metric.toShortString(),
@@ -24,7 +24,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
 
     switch (statusCode) {
       case HttpStatus.ok:
-        return Weather.fromJson(jsonDecode(response.body));
+        return WeatherDTO.fromJson(jsonDecode(response.body));
       case HttpStatus.notFound:
         throw CityNotFoundException(cityName);
       default:
