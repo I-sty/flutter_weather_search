@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/bloc/weather_bloc.dart';
-import 'package:flutter_app/data/database/database.dart';
+import 'package:flutter_app/blocs/database/database_bloc.dart';
+import 'package:flutter_app/blocs/network/weather_bloc.dart';
 import 'package:flutter_app/data/model/weather.dart';
 import 'package:flutter_app/data/model/weather_dto.dart';
 import 'package:flutter_app/widgets/CityInputField.dart';
@@ -9,8 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'qr_code_page.dart';
 
 class SearchPage extends StatelessWidget {
-  final _db = MyDatabase();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,7 +55,7 @@ class SearchPage extends StatelessWidget {
       return buildLoading();
     } else if (state is WeatherLoaded) {
       var weatherItem = convertWeather(state.weather);
-      _db.insert(weatherItem);
+      BlocProvider.of<DatabaseBloc>(context).add(Insert(weatherItem));
       return buildColumnWithData(weatherItem);
     } else {
       // (state is WeatherError)

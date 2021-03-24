@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/data/model/weather_dto.dart';
-import 'package:flutter_app/data/weather_repository.dart';
+import 'package:flutter_app/repositories/weather_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'weather_event.dart';
@@ -15,9 +15,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc(this._weatherRepository) : super(WeatherInitial());
 
   @override
-  Stream<WeatherState> mapEventToState(
-    WeatherEvent event,
-  ) async* {
+  Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     if (event is GetWeather) {
       try {
         yield WeatherLoading();
@@ -35,6 +33,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       } on CityNotFoundException catch (e) {
         yield WeatherError("Unknown city name: ${e.cityName}");
       }
+    } else if (event is ResetWeather) {
+      yield WeatherInitial();
     }
   }
 

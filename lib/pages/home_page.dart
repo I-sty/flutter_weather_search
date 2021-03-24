@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/blocs/network/weather_bloc.dart';
 import 'package:flutter_app/pages/history_page.dart';
 import 'package:flutter_app/pages/search_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,7 +21,12 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _onTabTapped,
+        onTap: (index) {
+          BlocProvider.of<WeatherBloc>(context).add(ResetWeather());
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
@@ -29,11 +36,5 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _children[_currentIndex],
     );
-  }
-
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
   }
 }

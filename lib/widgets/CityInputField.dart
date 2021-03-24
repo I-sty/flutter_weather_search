@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/bloc/weather_bloc.dart';
+import 'package:flutter_app/blocs/network/weather_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CityInputField extends StatelessWidget {

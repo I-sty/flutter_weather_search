@@ -1,9 +1,6 @@
 import 'package:flutter_app/data/database/database.dart';
 import 'package:flutter_app/data/model/weather.dart';
-
-abstract class DatabaseRepository {
-  Future<List<WeatherItem>> fetchWeather();
-}
+import 'package:flutter_app/repositories/database_repository.dart';
 
 class DatabaseRepositoryImpl implements DatabaseRepository {
   late MyDatabase _db;
@@ -13,7 +10,12 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<List<WeatherItem>> fetchWeather() async {
+  Future<List<WeatherItem>> getDatabaseContent() async {
     return await _db.weatherHistory();
+  }
+
+  @override
+  void insertNewItem(WeatherItem item) async {
+    _db.insert(item);
   }
 }

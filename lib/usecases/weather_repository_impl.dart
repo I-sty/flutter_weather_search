@@ -2,14 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_app/constants.dart';
+import 'package:flutter_app/data/model/weather_dto.dart';
+import 'package:flutter_app/repositories/weather_repository.dart';
 import 'package:http/http.dart' as http;
-
-import 'model/weather_dto.dart';
-
-abstract class WeatherRepository {
-  /// Throws [NetworkException], [CityNotFoundException].
-  Future<WeatherDTO> fetchWeather(String cityName, OWUnits metric);
-}
 
 class WeatherRepositoryImpl implements WeatherRepository {
   @override
@@ -30,15 +25,5 @@ class WeatherRepositoryImpl implements WeatherRepository {
       default:
         throw NetworkException();
     }
-  }
-}
-
-class NetworkException implements Exception {}
-
-class CityNotFoundException implements Exception {
-  String cityName = "";
-
-  CityNotFoundException(String cityName) {
-    this.cityName = cityName;
   }
 }

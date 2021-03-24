@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/bloc/database_bloc.dart';
+import 'package:flutter_app/blocs/database/database_bloc.dart';
 import 'package:flutter_app/data/model/weather.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,23 +8,25 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _get(context);
 
-    return Container(
-      alignment: Alignment.center,
-      child: BlocConsumer<DatabaseBloc, DatabaseState>(
-        listener: (context, state) {
-          if (state is DatabaseError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Db error"),
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return _getPageContent(context, state);
-        },
-      ),
-    );
+    return RefreshIndicator(
+        child: Container(
+          alignment: Alignment.center,
+          child: BlocConsumer<DatabaseBloc, DatabaseState>(
+            listener: (context, state) {
+              if (state is DatabaseError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Db error"),
+                  ),
+                );
+              }
+            },
+            builder: (context, state) {
+              return _getPageContent(context, state);
+            },
+          ),
+        ),
+        onRefresh: _onRefresh);
   }
 
   Widget _getPageContent(BuildContext context, DatabaseState state) {
@@ -47,27 +49,32 @@ class HistoryPage extends StatelessWidget {
   }
 
   ListView getWeatherItems(List<WeatherItem> result) {
-    return ListView(
-      children: weatherItems(result),
+    return ListView.separated(
+      physics: AlwaysScrollableScrollPhysics(),
+      separatorBuilder: (context, index) => Divider(),
+      itemCount: result.length,
+      itemBuilder: (context, index) => weatherItems(result[index]),
     );
   }
 
-  List<ListTile> weatherItems(List<WeatherItem> result) {
-    List<ListTile> list = List<ListTile>.empty(growable: true);
-    for (WeatherItem item in result) {
-      list.add(ListTile(
-        title: Text("${item.cityName}, ${item.country}"),
-        subtitle: Text("${item.temp}"),
-        isThreeLine: true,
-        leading: Icon(Icons.thermostat_rounded),
-      ));
-    }
-    return list;
+  ListTile weatherItems(WeatherItem item) {
+    return ListTile(
+      title: Text("${item.cityName}, ${item.country}"),
+      subtitle: Text("${item.temp}"),
+      isThreeLine: true,
+      leading: Icon(Icons.thermostat_rounded),
+    );
   }
 
   void _get(BuildContext context) {
     Future.delayed(const Duration(milliseconds: 500), () {
       context.read<DatabaseBloc>().add(GetList());
     });
+  }
+
+  Future<Null> _onRefresh() async {
+    // BlocProvider.of<DatabaseBloc>(context).add(GetList());
+    // final item = BlocProvider.of<DatabaseBloc>(context).add(GetList());
+    // return item.firstWhere((e) => e is ! GetList);
   }
 }

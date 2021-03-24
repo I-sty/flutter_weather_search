@@ -9,3 +9,5 @@ class GetWeather extends WeatherEvent {
 
   GetWeather(this.cityName);
 }
+
+class ResetWeather extends WeatherEvent {}
