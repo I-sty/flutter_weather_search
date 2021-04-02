@@ -21,12 +21,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) {
-          BlocProvider.of<WeatherBloc>(context).add(ResetWeather());
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        onTap: (index) => _navigateTo(index),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
@@ -34,7 +29,62 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
         ],
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('dummy list item #1'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('dummy list item #2'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('About'),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: _children[_currentIndex],
     );
+  }
+
+  _navigateTo(index) {
+    _resetWeatherBloc();
+    _changeIndex(index);
+  }
+
+  void _changeIndex(index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  void _resetWeatherBloc() {
+    BlocProvider.of<WeatherBloc>(context).add(ResetWeather());
   }
 }

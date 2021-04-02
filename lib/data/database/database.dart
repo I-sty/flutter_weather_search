@@ -22,10 +22,10 @@ class MyDatabase {
       // `path` package is best practice to ensure the path is correctly
       // constructed for each platform.
       join(await getDatabasesPath(), 'database.db'),
-      // When the database is first created, create a table to store dogs.
+      // When the database is first created, create a table to store weather items.
       onCreate: (db, version) {
         return db.execute(
-          "CREATE TABLE weather(id INTEGER PRIMARY KEY, temp DOUBLE, city TEXT, country TEXT, date INTEGER)",
+          "CREATE TABLE weather(id INTEGER PRIMARY KEY, temp DOUBLE, city TEXT, country TEXT, date INTEGER, unit TEXT)",
         );
       },
       // Set the version. This executes the onCreate function and provides a
@@ -52,10 +52,9 @@ class MyDatabase {
     // Get a reference to the database.
     final Database db = await _database;
 
-    // Query the table for all The Dogs.
     final List<Map<String, dynamic>> maps = await db.query('weather');
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    // Convert the List<Map<String, dynamic> into a List<WeatherItem>.
     return List.generate(maps.length, (i) {
       return WeatherItem(
         id: maps[i]['id'],
@@ -63,7 +62,7 @@ class MyDatabase {
         temp: maps[i]['temp'],
         country: maps[i]['country'],
         date: DateTime.fromMillisecondsSinceEpoch(maps[i]['date']),
-      );
+          unit: maps[i]['unit']);
     });
   }
 
@@ -71,12 +70,9 @@ class MyDatabase {
     // Get a reference to the database.
     final db = await _database;
 
-    // Remove the Dog from the Database.
     await db.delete(
       'weather',
-      // Use a `where` clause to delete a specific dog.
       where: "id = ?",
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
       whereArgs: [id],
     );
   }

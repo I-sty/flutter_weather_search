@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/database/database_bloc.dart';
 import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/pages/history_item_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -53,16 +54,17 @@ class HistoryPage extends StatelessWidget {
       physics: AlwaysScrollableScrollPhysics(),
       separatorBuilder: (context, index) => Divider(),
       itemCount: result.length,
-      itemBuilder: (context, index) => weatherItems(result[index]),
+      itemBuilder: (context, index) => weatherItems(context, result[index]),
     );
   }
 
-  ListTile weatherItems(WeatherItem item) {
+  ListTile weatherItems(BuildContext context, WeatherItem item) {
     return ListTile(
       title: Text("${item.cityName}, ${item.country}"),
       subtitle: Text("${item.temp}"),
       isThreeLine: true,
       leading: Icon(Icons.thermostat_rounded),
+      onTap: () => _openItemPage(context, item),
     );
   }
 
@@ -76,5 +78,12 @@ class HistoryPage extends StatelessWidget {
     // BlocProvider.of<DatabaseBloc>(context).add(GetList());
     // final item = BlocProvider.of<DatabaseBloc>(context).add(GetList());
     // return item.firstWhere((e) => e is ! GetList);
+  }
+
+  _openItemPage(BuildContext context, WeatherItem item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HistoryItemPage(item: item)),
+    );
   }
 }

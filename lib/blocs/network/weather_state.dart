@@ -15,8 +15,9 @@ class WeatherLoading extends WeatherState {
 
 class WeatherLoaded extends WeatherState {
   final WeatherDTO weather;
+  final OWUnits unit;
 
-  const WeatherLoaded(this.weather);
+  const WeatherLoaded(this.weather, this.unit);
 
   @override
   bool operator ==(Object o) {

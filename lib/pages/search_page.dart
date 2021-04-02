@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/database/database_bloc.dart';
 import 'package:flutter_app/blocs/network/weather_bloc.dart';
+import 'package:flutter_app/constants.dart';
 import 'package:flutter_app/data/model/weather.dart';
 import 'package:flutter_app/data/model/weather_dto.dart';
 import 'package:flutter_app/widgets/CityInputField.dart';
@@ -54,7 +55,7 @@ class SearchPage extends StatelessWidget {
     } else if (state is WeatherLoading) {
       return buildLoading();
     } else if (state is WeatherLoaded) {
-      var weatherItem = convertWeather(state.weather);
+      var weatherItem = convertWeather(state.weather, state.unit);
       BlocProvider.of<DatabaseBloc>(context).add(Insert(weatherItem));
       return buildColumnWithData(weatherItem);
     } else {
@@ -98,7 +99,7 @@ class SearchPage extends StatelessWidget {
         ),
         Text(
           // Display the temperature with 1 decimal place
-          "${weather.temp.toStringAsFixed(1)} °C",
+          "${weather.temp.toStringAsFixed(1)}${weather.unit}",
           style: TextStyle(fontSize: 80),
         ),
         CityInputField(),
@@ -107,11 +108,22 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-WeatherItem convertWeather(WeatherDTO weather) {
+WeatherItem convertWeather(WeatherDTO weather, OWUnits unit) {
   return WeatherItem(
-      id: 0,
-      cityName: weather.cityName,
-      temp: weather.main.temp,
-      country: weather.system.country,
-      date: DateTime.now());
+    id: 0,
+    cityName: weather.cityName,
+    temp: weather.main.temp,
+    country: weather.system.country,
+    date: DateTime.now(),
+    unit: _getUnit(unit),
+  );
+}
+
+String _getUnit(OWUnits unit) {
+  switch (unit) {
+    case OWUnits.METRIC:
+      return " °C";
+    case OWUnits.IMPERIAL:
+      return " °F";
+  }
 }

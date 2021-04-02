@@ -27,7 +27,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         }
         final weather =
             await _weatherRepository.fetchWeather(event.cityName!, event.unit);
-        yield WeatherLoaded(weather);
+        yield WeatherLoaded(weather, event.unit);
       } on NetworkException {
         yield WeatherError("Couldn't fetch weather.");
       } on CityNotFoundException catch (e) {
