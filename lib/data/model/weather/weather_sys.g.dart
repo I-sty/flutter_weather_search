@@ -8,12 +8,12 @@ part of 'weather_sys.dart';
 
 WeatherSys _$WeatherSysFromJson(Map<String, dynamic> json) {
   return WeatherSys(
-    json['type'] as int? ?? -1,
-    json['id'] as int? ?? -1,
+    json['type'] as int,
+    json['id'] as int,
     json['message'] as String? ?? '',
-    json['country'] as String? ?? '',
-    json['sunrise'] as int? ?? -1,
-    json['sunset'] as int? ?? -1,
+    json['country'] as String,
+    json['sunrise'] as int,
+    json['sunset'] as int,
   );
 }
 

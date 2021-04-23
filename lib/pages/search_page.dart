@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/database/database_bloc.dart';
-import 'package:flutter_app/blocs/network/weather_bloc.dart';
+import 'package:flutter_app/blocs/network/weather/weather_bloc.dart';
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/data/model/weather.dart';
-import 'package:flutter_app/data/model/weather_dto.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
+import 'package:flutter_app/data/model/weather/weather_dto.dart';
 import 'package:flutter_app/widgets/CityInputField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

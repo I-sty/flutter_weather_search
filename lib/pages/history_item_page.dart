@@ -1,20 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/blocs/network/wikipedia/wikipedia_bloc.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HistoryItemPage extends StatelessWidget {
+class HistoryItemPage extends StatefulWidget {
   final WeatherItem item;
 
   HistoryItemPage({Key? key, required this.item}) : super(key: key);
 
+  @override
+  _HistoryItemPageState createState() => _HistoryItemPageState();
+}
+
+class _HistoryItemPageState extends State<HistoryItemPage> {
   late final Color color;
+  late WikipediaBloc bloc;
+
+  @override
+  void didChangeDependencies() {
+    bloc = BlocProvider.of<WikipediaBloc>(context);
+    bloc.add(SearchForCity(widget.item.cityName));
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     color = Theme.of(context).primaryColor;
     return Scaffold(
-      appBar: AppBar(title: Text("${item.cityName}")),
+      appBar: AppBar(title: Text("${widget.item.cityName}")),
       body: ListView(
-        children: <Widget>[_titleSection(), _buttonSection(), _textSection()],
+        children: <Widget>[
+          _titleSection(),
+          _buttonSection(),
+          BlocConsumer<WikipediaBloc, WikipediaState>(
+            listener: (context, state) {
+              if (state is Error) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.message)));
+              }
+            },
+            builder: (context, state) {
+              return _textSection(state);
+            },
+          )
+        ],
       ),
     );
   }
@@ -33,14 +62,15 @@ class HistoryItemPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    item.cityName,
+                    widget.item.cityName,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color: Colors.black),
                   ),
                 ),
                 Text(
-                  item.country,
+                  widget.item.country,
                   style: TextStyle(
                     color: Colors.grey[500],
                   ),
@@ -51,11 +81,12 @@ class HistoryItemPage extends StatelessWidget {
           /*3*/
           Icon(
             Icons.thermostat_sharp,
+            size: 32,
             color: Colors.red[500],
           ),
           Text(
-            "${item.temp.toStringAsFixed(1)}${item.unit}",
-            style: TextStyle(fontSize: 26),
+            "${widget.item.temp.toStringAsFixed(1)}${widget.item.unit}",
+            style: TextStyle(fontSize: 32),
           ),
         ],
       ),
@@ -96,18 +127,29 @@ class HistoryItemPage extends StatelessWidget {
     );
   }
 
-  Widget _textSection() {
-    return Container(
-      padding: const EdgeInsets.all(32),
-      child: Text(
-        'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-        'Alps. Situated 1,578 meters above sea level, it is one of the '
-        'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-        'half-hour walk through pastures and pine forest, leads you to the '
-        'lake, which warms to 20 degrees Celsius in the summer. Activities '
-        'enjoyed here include rowing, and riding the summer toboggan run.',
+  Widget _textSection(WikipediaState state) {
+    return Container(padding: const EdgeInsets.all(32), child: _result(state));
+  }
+
+  Widget _result(WikipediaState state) {
+    if (state is Loaded) {
+      return Text(
+        state.result.query.search.first.snippet,
         softWrap: true,
-      ),
-    );
+      );
+    } else if ((state is Init) || (state is Loading)) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+        ],
+      );
+    } else if (state is Error) {
+      return Text(state.message,
+          style: TextStyle(fontSize: 23, color: Colors.redAccent));
+    } else {
+      return Text("No data available",
+          style: TextStyle(fontSize: 23, color: Colors.redAccent));
+    }
   }
 }

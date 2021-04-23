@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_app/constants.dart';
-import 'package:flutter_app/data/model/weather_dto.dart';
+import 'package:flutter_app/data/model/weather/weather_dto.dart';
+import 'package:flutter_app/repositories/exceptions/city_not_found_exception.dart';
+import 'package:flutter_app/repositories/exceptions/network_exception.dart';
 import 'package:flutter_app/repositories/weather_repository.dart';
 import 'package:http/http.dart' as http;
 

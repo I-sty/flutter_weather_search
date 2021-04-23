@@ -1,5 +1,5 @@
-import 'package:flutter_app/data/model/weather_main.dart';
-import 'package:flutter_app/data/model/weather_sys.dart';
+import 'package:flutter_app/data/model/weather/weather_main.dart';
+import 'package:flutter_app/data/model/weather/weather_sys.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'weather_dto.g.dart';

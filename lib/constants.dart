@@ -14,3 +14,17 @@ extension ParseToString on OWUnits {
     return this.toString().split('.').last.toLowerCase();
   }
 }
+
+class WikipediaConstants {
+  static const URL = "en.wikipedia.org";
+  static const PATH = "w/api.php";
+  static const ACTION = "action";
+  static const QUERY = "query";
+  static const LIST = "list";
+  static const SEARCH = "search";
+  static const SRSEARCH = "srsearch";
+  static const FORMAT = "format";
+  static const JSON = "json";
+  static const UTF8 = "utf8";
+  static const ENABLE_1 = "1";
+}

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -57,11 +57,11 @@ class MyDatabase {
     // Convert the List<Map<String, dynamic> into a List<WeatherItem>.
     return List.generate(maps.length, (i) {
       return WeatherItem(
-        id: maps[i]['id'],
-        cityName: maps[i]['city'],
-        temp: maps[i]['temp'],
-        country: maps[i]['country'],
-        date: DateTime.fromMillisecondsSinceEpoch(maps[i]['date']),
+          id: maps[i]['id'],
+          cityName: maps[i]['city'],
+          temp: maps[i]['temp'],
+          country: maps[i]['country'],
+          date: DateTime.fromMillisecondsSinceEpoch(maps[i]['date']),
           unit: maps[i]['unit']);
     });
   }

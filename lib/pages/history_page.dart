@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/database/database_bloc.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
 import 'package:flutter_app/pages/history_item_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +37,7 @@ class HistoryPage extends StatelessWidget {
     } else if (state is DatabaseLoading) {
       return buildLoading();
     } else if (state is DatabaseLoaded) {
-      return getWeatherItems(state.list);
+      return getWeatherItems(state.list.reversed.toList());
     } else {
       // (state is WeatherError)
       return buildLoading();
@@ -44,27 +45,37 @@ class HistoryPage extends StatelessWidget {
   }
 
   Widget buildLoading() {
-    return Center(
-      child: CircularProgressIndicator(),
+    return Center(child: CircularProgressIndicator());
+  }
+
+  Widget getWeatherItems(List<WeatherItem> result) {
+    if (result.isEmpty) {
+      return Text(
+        "No data",
+        style: TextStyle(
+            fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black38),
+      );
+    }
+    return Scrollbar(
+      child: ListView.builder(
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        itemCount: result.length,
+        itemBuilder: (context, index) => weatherItems(context, result[index]),
+      ),
     );
   }
 
-  ListView getWeatherItems(List<WeatherItem> result) {
-    return ListView.separated(
-      physics: AlwaysScrollableScrollPhysics(),
-      separatorBuilder: (context, index) => Divider(),
-      itemCount: result.length,
-      itemBuilder: (context, index) => weatherItems(context, result[index]),
-    );
-  }
-
-  ListTile weatherItems(BuildContext context, WeatherItem item) {
-    return ListTile(
-      title: Text("${item.cityName}, ${item.country}"),
-      subtitle: Text("${item.temp}"),
-      isThreeLine: true,
-      leading: Icon(Icons.thermostat_rounded),
-      onTap: () => _openItemPage(context, item),
+  Widget weatherItems(BuildContext context, WeatherItem item) {
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.only(top: 16),
+      child: ListTile(
+        title: Text("${item.cityName}, ${item.country}"),
+        subtitle: Text("${item.temp}"),
+        isThreeLine: false,
+        leading: Icon(Icons.thermostat_rounded),
+        onTap: () => _openItemPage(context, item),
+      ),
     );
   }
 

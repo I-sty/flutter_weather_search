@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/blocs/network/weather_bloc.dart';
+import 'package:flutter_app/blocs/network/weather/weather_bloc.dart';
 import 'package:flutter_app/pages/history_page.dart';
 import 'package:flutter_app/pages/search_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

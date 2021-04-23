@@ -1,5 +1,5 @@
 import 'package:flutter_app/data/database/database.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
 import 'package:flutter_app/repositories/database_repository.dart';
 
 class DatabaseRepositoryImpl implements DatabaseRepository {

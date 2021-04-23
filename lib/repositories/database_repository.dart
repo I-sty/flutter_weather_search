@@ -1,4 +1,4 @@
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
 
 abstract class DatabaseRepository {
   Future<List<WeatherItem>> getDatabaseContent();

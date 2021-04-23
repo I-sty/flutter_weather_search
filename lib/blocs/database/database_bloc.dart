@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_app/data/model/weather.dart';
+import 'package:flutter_app/data/model/weather/weather.dart';
 import 'package:flutter_app/repositories/database_repository.dart';
 import 'package:meta/meta.dart';
 
