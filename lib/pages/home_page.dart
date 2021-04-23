@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/network/weather/weather_bloc.dart';
 import 'package:flutter_app/pages/history_page.dart';
 import 'package:flutter_app/pages/search_page.dart';
+import 'package:flutter_app/pages/settings_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,9 +16,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String _appName = "Weather Search";
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Weather Search"),
+        title: Text(_appName),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -34,13 +37,28 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              child: Text('Drawer Header'),
+              child: Center(
+                  child: Text(
+                _appName,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white70),
+              )),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
             ),
             ListTile(
-              title: Text('dummy list item #1'),
+              leading: Icon(Icons.https),
+              title: Text(
+                'dummy list item #1',
+                style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    decorationThickness: 1.5,
+                    color: Colors.black54),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -49,7 +67,14 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              title: Text('dummy list item #2'),
+              leading: Icon(Icons.https),
+              title: Text(
+                'dummy list item #2',
+                style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    decorationThickness: 1.5,
+                    color: Colors.black54),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -58,12 +83,14 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              title: Text('About'),
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
               },
             ),
           ],
